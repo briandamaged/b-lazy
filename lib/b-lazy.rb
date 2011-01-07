@@ -285,31 +285,7 @@ module Enumerable
   end
   
   
-  # This is a lazy version of the #product method.  It returns
-  # all combinations of values from the provided Enumerators.
-  #
-  # Ex: [[1, 2], [3, 4]].lproduct.to_a -> [[1, 3], [1, 4], [2, 3], [2, 4]]
-  def lproduct()
-    Enumerator.new do |out|
-      catch :nothing_to_do do
-        refresh = []
-        sources = self.touch{|x| throw :nothing_to_do if x.empty?}.map do |e|
-          r = []
-          refresh << r
-          e.touch{|x| r << x}
-        end
-        
-        loop do
-          i = 0
-          while i < sources.size
-            if 
-          end
-        end
 
-      end
-      
-    end
-  end
   
   
   # Repeats the same sequence of elements n times.
@@ -335,6 +311,36 @@ module Enumerable
     else
       self.to_enum
     end
+  end
+
+end
+
+
+
+
+
+class Integer
+
+  
+
+  def self.positives
+    (1..Float::INFINITY).ensure_enum
+  end
+  
+  def self.non_negatives
+    (0..Float::INFINITY).ensure_enum
+  end
+  
+  def self.negatives
+    positives.lmap{|x| -1 * x}
+  end
+  
+  def self.non_positives
+    non_negatives.lmap{|x| -1 * x}
+  end
+  
+  def self.all
+    [[0], positives.lmap{|x| [x, -x]}.cons].cons
   end
 
 end

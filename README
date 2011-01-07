@@ -1,0 +1,14 @@
+=========================================================
+=      b-lazy : Why work hard for lazy evaluation?      =
+=========================================================
+
+b-lazy extends a handful of core Ruby objects to provide
+a more natural syntax for lazy evaluation.
+
+
+Installation:
+==================
+
+   gem install --remote b-lazy
+
+
