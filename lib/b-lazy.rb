@@ -300,6 +300,10 @@ module Enumerable
   end
 
 
+
+  
+
+
   # When #to_enum is called on an Enumerator, it creates a copy
   # and rewinds it (when possible).  Unfortunately, this is
   # not actually the behavior that we want; we just want to make
@@ -312,6 +316,9 @@ module Enumerable
       self.to_enum
     end
   end
+  
+  
+
 
 end
 
@@ -342,5 +349,27 @@ class Integer
   def self.all
     [[0], positives.lmap{|x| [x, -x]}.cons].cons
   end
+
+end
+
+
+
+
+module BLazy
+
+  # Occassionally, we find that it is necessary to compute all values upfront
+  # before the enumeration.  For example, if we are extracting lines from a
+  # file, then we might decide that guaranteeing that the file is closed cleanly
+  # is more important than lazily enumerating.
+  #
+  # This function serves as a compromise: compute all of the values, but only
+  # do so if I attempt to enumerate over them. 
+  def when_needed(&f)
+    Enumerator.new do |out|
+      values = f.call
+      values.each{|v| out.yield v}
+    end
+  end
+  module_function :when_needed
 
 end
